@@ -1,0 +1,15 @@
+print("Possible 4-digit PINs:\n")
+
+count = 0
+pins =[]
+
+for a in [0, 2, 4, 6, 8]:
+    for b in [0, 2, 4, 6, 8]:
+        for c in [0, 2, 4, 6, 8]:
+            for d in [0, 2, 4, 6, 8]:
+                if a + b + c + d == 16:
+                    ab = f"{a}{b}{c}{d}"
+                    pins.append(ab)
+                    count += 1
+                    
+print(f"\nTotal possible PINs: {count} -", pins)
