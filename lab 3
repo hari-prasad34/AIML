@@ -1,0 +1,83 @@
+import csv
+import io
+
+# Simulated workload_data.csv content
+csv_data = """Latency Sensitivity,Data Volume,RAM Demand,Network Bandwidth,GPU Required,High-Performance Edge
+High,Large,High,Dedicated,Yes,Yes
+High,Small,High,Shared,Yes,No
+High,Large,High,Shared,Yes,Yes
+Low,Large,Medium,Shared,No,No
+High,Large,High,Dedicated,No,Yes
+"""
+
+def run_find_s():
+    # Read CSV data from string
+    csv_file = io.StringIO(csv_data)
+    reader = csv.reader(csv_file)
+
+    # Read header
+    headers = next(reader)
+    features = headers[:-1]
+    num_features = len(features)
+
+    # Initialize the most specific hypothesis
+    h = ['Ø'] * num_features
+
+    print("=" * 80)
+    print("FIND-S ALGORITHM")
+    print("=" * 80)
+
+    print("\nFeatures:")
+    print(features)
+
+    print("\nInitial Hypothesis:")
+    print(h)
+    print("-" * 80)
+
+    row_no = 1
+
+    for row in reader:
+
+        # Skip empty rows
+        if not row:
+            continue
+
+        instance = [x.strip() for x in row[:-1]]
+        target = row[-1].strip()
+
+        print(f"\nTraining Example {row_no}")
+        print("Instance :", instance)
+        print("Target   :", target)
+
+        if target.lower() == "yes":
+
+            print("Positive Example -> Updating Hypothesis")
+
+            for i in range(num_features):
+
+                if h[i] == 'Ø':
+                    h[i] = instance[i]
+
+                elif h[i] != instance[i]:
+                    h[i] = '?'
+
+        else:
+            print("Negative Example -> Ignored")
+
+        print("Current Hypothesis:", h)
+
+        row_no += 1
+
+    print("\n" + "=" * 80)
+    print("FINAL HYPOTHESIS")
+    print("=" * 80)
+
+    for feature, value in zip(features, h):
+        print(f"{feature:25} : {value}")
+
+    print("\nMost Specific Hypothesis:")
+    print(h)
+
+
+if __name__ == "__main__":
+    run_find_s()
